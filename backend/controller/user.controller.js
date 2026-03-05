@@ -111,12 +111,11 @@ export const login = async (req, res) => {
       { expiresIn: "1d" },
     );
 
-    // 🍪 Send token as HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // true on HTTPS
-      sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -131,8 +130,7 @@ export const login = async (req, res) => {
         isHead: user.isHead,
         isStatus: user.isStatus,
         department: user.department,
-        jobPosition: user.jobPosition
-        
+        jobPosition: user.jobPosition,
       },
     });
   } catch (error) {
