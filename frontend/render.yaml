@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: your-app-name
+    name: frontend
     runtime: static
     buildCommand: npm run build
     staticPublishPath: ./dist
