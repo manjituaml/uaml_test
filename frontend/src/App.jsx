@@ -7,7 +7,7 @@ import Employee from "./pages/employee/Employee";
 import CreateEmployee from "./pages/employee/CreateEmployee";
 import EmployeeProfile from "./pages/employee/EmployeeProfile";
 import EditEmployee from "./pages/employee/EditEmployee";
-import EditOrderCard from "./components/ordercard/editOrderCard";
+import EditOrderCard from "./components/ordercard/EditOrderCard";
 import Login from "./pages/auth/Login";
 import Logout from "./pages/auth/Logout";
 
