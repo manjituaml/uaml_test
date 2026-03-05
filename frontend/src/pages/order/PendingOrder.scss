@@ -1,0 +1,797 @@
+// PendingOrder.scss
+
+// Variables
+$primary-color: #4361ee;
+$primary-hover: #3a56d4;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$danger-color: #ef4444;
+$info-color: #06b6d4;
+$purple-color: #8b5cf6;
+$text-primary: #1f2937;
+$text-secondary: #6b7280;
+$border-color: #e5e7eb;
+$background-light: #f8fafc;
+$background-white: #ffffff;
+$card-shadow:
+  0 1px 3px rgba(0, 0, 0, 0.1),
+  0 1px 2px rgba(0, 0, 0, 0.06);
+$card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Main Container
+.orders-modern-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 24px;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+// Loading & Error States (reuse from Employee.scss)
+.loading-container,
+.error-container {
+  @include flex-center;
+  height: 80vh;
+}
+
+.loading-content,
+.error-content {
+  @include flex-center;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  max-width: 400px;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  color: $primary-color;
+}
+
+.error-icon {
+  color: $danger-color;
+}
+
+.retry-btn {
+  @include flex-center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: $primary-hover;
+  }
+}
+
+// Page Header
+.page-header {
+  background: white;
+
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: $card-shadow;
+  @include flex-between;
+  gap: 24px;
+
+  .header-left {
+    @include flex-center;
+    gap: 24px;
+    flex: 1;
+
+    .header-icon {
+      @include flex-center;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, $primary-color, $primary-hover);
+      
+      border-radius: 16px;
+      color: white;
+    }
+    
+    .header-content {
+      flex: 1;
+      
+      h1 {
+        margin: 0 0 8px 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: $text-primary;
+      }
+      
+      .subtitle {
+        margin: 0 0 24px 0;
+        color: $text-secondary;
+        font-size: 15px;
+      }
+
+      .stats-overview {
+        display: flex;
+        gap: 32px;
+        
+        .stat-item {
+          .stat-number {
+            display: block;
+            font-size: 24px;
+            font-weight: 700;
+            color: $text-primary;
+            line-height: 1.2;
+          }
+
+          .stat-label {
+            font-size: 13px;
+            color: $text-secondary;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+  
+  .header-actions {
+    .btn-create-order {
+      @include flex-center;
+      gap: 10px;
+      padding: 14px 24px;
+      background: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+      
+      &:hover {
+        background: $primary-hover;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
+      }
+    }
+  }
+}
+
+// Quick Stats Grid
+.quick-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  
+  .stat-card {
+    background: white;
+    background: linear-gradient(145deg, red, black);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: $card-shadow;
+    @include flex-center;
+    gap: 16px;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-icon {
+      @include flex-center;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+
+      &.pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: $warning-color;
+      }
+      
+      &.ready {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+
+      &.invoice {
+        background: rgba(139, 92, 246, 0.1);
+        color: $purple-color;
+      }
+
+      &.dispatch {
+        background: rgba(6, 182, 212, 0.1);
+        color: $info-color;
+      }
+    }
+
+    .stat-content {
+      .stat-number {
+        font-size: 20px;
+        font-weight: 700;
+        color: $text-primary;
+        line-height: 1.2;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: $text-secondary;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Controls Section
+.controls-section {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: $card-shadow;
+
+  .search-box {
+    position: relative;
+    margin-bottom: 24px;
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-secondary;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 20px 14px 48px;
+      border: 2px solid $border-color;
+      border-radius: 12px;
+      font-size: 15px;
+      color: $text-primary;
+      transition: all 0.2s;
+      background: $background-light;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+      }
+
+      &::placeholder {
+        color: $text-secondary;
+      }
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: $text-secondary;
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      @include flex-center;
+      border-radius: 50%;
+
+      &:hover {
+        background: $border-color;
+      }
+    }
+  }
+
+  .filters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+
+    .filter-group {
+      .filter-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: $text-primary;
+
+        svg {
+          color: $text-secondary;
+        }
+      }
+
+      .filter-select {
+        width: 100%;
+        padding: 10px 16px;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        font-size: 14px;
+        color: $text-primary;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+      }
+    }
+  }
+
+  .results-info {
+    @include flex-between;
+    padding-top: 16px;
+    border-top: 1px solid $border-color;
+
+    .results-count {
+      font-size: 13px;
+      color: $text-secondary;
+    }
+
+    .reset-filters {
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      font-size: 13px;
+      color: $text-secondary;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: $background-light;
+        border-color: $text-secondary;
+      }
+    }
+  }
+}
+
+// Orders Grid
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .no-results {
+    grid-column: 1 / -1;
+    @include flex-center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 60px 20px;
+    text-align: center;
+    background: white;
+    border-radius: 16px;
+    box-shadow: $card-shadow;
+
+    svg {
+      color: $text-secondary;
+      opacity: 0.5;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      color: $text-primary;
+    }
+
+    p {
+      margin: 4px 0 0 0;
+      color: $text-secondary;
+      font-size: 14px;
+    }
+
+    .create-first-order {
+      @include flex-center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: $primary-hover;
+      }
+    }
+  }
+}
+
+// Order Card
+.order-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: $card-shadow;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid $border-color;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $card-shadow-hover;
+    border-color: $primary-color;
+
+    .view-cta {
+      color: $primary-color;
+    }
+  }
+
+  .card-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid $border-color;
+
+    .order-meta {
+      @include flex-between;
+      margin-bottom: 12px;
+
+      .order-number {
+        .prefix {
+          font-size: 12px;
+          color: $text-secondary;
+          font-weight: 500;
+        }
+
+        .number {
+          font-size: 18px;
+          font-weight: 600;
+          color: $text-primary;
+          margin-left: 4px;
+        }
+      }
+
+      .status-badge {
+        @include flex-center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .customer-info {
+      @include flex-center;
+      gap: 8px;
+      font-size: 14px;
+      color: $text-secondary;
+
+      .customer-name {
+        font-weight: 500;
+        color: $text-primary;
+      }
+    }
+  }
+
+  .card-body {
+    padding: 20px;
+
+    .item-info {
+      margin-bottom: 20px;
+
+      .item-name {
+        @include flex-center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: $text-primary;
+
+        svg {
+          color: $primary-color;
+        }
+      }
+
+      .item-type {
+        font-size: 13px;
+        color: $text-secondary;
+
+        .type-label {
+          margin-right: 6px;
+        }
+
+        .type-value {
+          font-weight: 500;
+          padding: 2px 8px;
+          border-radius: 12px;
+          background: $background-light;
+
+          &.domestic {
+            color: $success-color;
+            background: rgba(16, 185, 129, 0.1);
+          }
+
+          &.export {
+            color: $primary-color;
+            background: rgba(67, 97, 238, 0.1);
+          }
+        }
+      }
+    }
+
+    .order-details {
+      margin-bottom: 20px;
+
+      .detail-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 16px;
+
+        .detail-item {
+          padding: 12px;
+          background: $background-light;
+          border-radius: 8px;
+
+          .detail-label {
+            display: block;
+            font-size: 12px;
+            color: $text-secondary;
+            margin-bottom: 4px;
+          }
+
+          .detail-value {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: $text-primary;
+          }
+
+          &.highlight {
+            background: rgba(67, 97, 238, 0.1);
+
+            .detail-value {
+              color: $primary-color;
+            }
+          }
+        }
+      }
+    }
+
+    .progress-section {
+      margin-bottom: 20px;
+
+      .progress-header {
+        @include flex-between;
+        margin-bottom: 8px;
+
+        span {
+          font-size: 13px;
+          font-weight: 500;
+          color: $text-primary;
+
+          &:last-child {
+            color: $primary-color;
+          }
+        }
+      }
+
+      .progress-bar {
+        height: 6px;
+        background: $border-color;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 8px;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, $primary-color, $primary-hover);
+          border-radius: 3px;
+          transition: width 0.3s ease;
+        }
+      }
+
+      .progress-stats {
+        @include flex-between;
+        font-size: 12px;
+        color: $text-secondary;
+
+        .stat.highlight {
+          color: $primary-color;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .dates-section {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: $text-secondary;
+
+      .date-item {
+        @include flex-center;
+        gap: 6px;
+
+        .date-label {
+          font-weight: 500;
+        }
+
+        .date-value {
+          color: $text-primary;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .card-footer {
+    padding: 16px 20px;
+    border-top: 1px solid $border-color;
+
+    .action-buttons {
+      .closed-indicator {
+        @include flex-center;
+        gap: 8px;
+        font-size: 13px;
+        color: $success-color;
+        font-weight: 500;
+      }
+
+      .view-cta {
+        @include flex-center;
+        gap: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        color: $text-secondary;
+        transition: color 0.2s;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .orders-modern-page {
+    padding: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+
+    .header-left {
+      flex-direction: column;
+      text-align: center;
+
+      .stats-overview {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .filters-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detail-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.pending-amount-card {
+  min-width: 260px;
+  padding: 22px 24px;
+  border-radius: 18px;
+
+  transition: all 1s ease;
+
+  box-shadow: 0px 0px 0px rgb(0, 0, 0);
+  border: none;
+  background: white;
+
+  &:hover {
+    background: linear-gradient(145deg, #ffffff, #f3f6fb);
+    box-shadow: 0px 10px 10px rgb(0, 0, 0);
+    border: 1px solid #e6ecf5;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    color: #1f2937;
+  }
+
+  .amount-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 15px;
+
+    .label {
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .value {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    &.domestic .value {
+      // color: #2563eb; // blue
+      color: #000;
+    }
+
+    &.export .value {
+      // color: #16a34a; // green
+      color: #000;
+    }
+
+    &.total {
+      margin-top: 10px;
+      font-size: 16px;
+
+      .highlight {
+        font-size: 18px;
+        font-weight: 700;
+        // color: #7c3aed; // purple premium look
+      }
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 12px 0;
+  }
+}

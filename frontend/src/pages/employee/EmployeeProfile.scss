@@ -1,0 +1,524 @@
+// EmployeeProfile.scss
+
+// Variables
+$primary-color: #4361ee;
+$primary-hover: #3a56d4;
+$secondary-color: #6c757d;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$danger-color: #ef4444;
+$text-primary: #1f2937;
+$text-secondary: #6b7280;
+$border-color: #e5e7eb;
+$background-light: #f8fafc;
+$card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+$card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+// Mixins 
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Main Container
+.profile-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 24px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// Loading State
+.profile-loading {
+  @include flex-center;
+  flex-direction: column;
+  height: 60vh;
+  gap: 16px;
+
+  .loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid $border-color;
+    border-top-color: $primary-color;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+}
+
+// Error State
+.profile-error {
+  @include flex-center;
+  flex-direction: column;
+  height: 60vh;
+  gap: 16px;
+  text-align: center;
+
+  h3 {
+    color: $text-primary;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 12px 0 8px;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 14px;
+    max-width: 300px;
+  }
+}
+
+// Header Section
+.profile-header {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: $card-shadow;
+  @include flex-between;
+  gap: 24px;
+
+  .profile-avatar-section {
+    @include flex-center;
+    gap: 20px;
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, $primary-color 0%, #3a56d4 100%);
+      color: white;
+      border-radius: 50%;
+      @include flex-center;
+      font-size: 28px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+
+    .profile-meta {
+      h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: $text-primary;
+        line-height: 1.3;
+      }
+
+      .profile-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+
+        .tag {
+          @include flex-center;
+          gap: 6px;
+          padding: 6px 12px;
+          background: $background-light;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 500;
+
+          svg {
+            opacity: 0.8;
+          }
+
+          &.tag-position {
+            background: rgba(67, 97, 238, 0.1);
+            color: $primary-color;
+          }
+
+          &.tag-department {
+            background: rgba(16, 185, 129, 0.1);
+            color: $success-color;
+          }
+
+          &.tag-status {
+            background: rgba(239, 68, 68, 0.1);
+          }
+        }
+      }
+    }
+  }
+
+  .header-actions {
+    @include flex-center;
+    gap: 12px;
+
+    .btn-icon {
+      @include flex-center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid $border-color;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: $background-light;
+      }
+    }
+
+    .btn-primary, .btn-secondary {
+      @include flex-center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: $primary-color;
+      color: white;
+
+      &:hover {
+        background: $primary-hover;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+      }
+    }
+
+    .btn-secondary {
+      background: white;
+      color: $text-primary;
+      border: 1px solid $border-color;
+
+      &:hover {
+        background: $background-light;
+        border-color: $text-secondary;
+      }
+    }
+  }
+}
+
+// Main Content Layout
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Content Columns
+.content-left, .content-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// Info Card Component
+.info-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: $card-shadow;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: $card-shadow-hover;
+  }
+
+  .card-header {
+    @include flex-center;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    svg {
+      color: $primary-color;
+    }
+  }
+}
+
+// Info Grid
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .info-value {
+      @include flex-center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      color: $text-primary;
+
+      svg {
+        color: $text-secondary;
+      }
+    }
+
+    .status-badge {
+      @include flex-center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+    }
+  }
+}
+
+// Privileges Grid
+.privileges-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .privilege-item {
+    @include flex-between;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid $border-color;
+    transition: all 0.2s;
+
+    &.active {
+      border-color: $success-color;
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    &.inactive {
+      opacity: 0.7;
+    }
+
+    .privilege-title {
+      font-weight: 500;
+      color: $text-primary;
+      margin-bottom: 4px;
+    }
+
+    .privilege-desc {
+      font-size: 12px;
+      color: $text-secondary;
+    }
+
+    .privilege-status {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 12px;
+      background: $background-light;
+      color: $text-secondary;
+    }
+  }
+}
+
+// Details Grid
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  .detail-item {
+    @include flex-center;
+    gap: 16px;
+    padding: 16px;
+    background: $background-light;
+    border-radius: 12px;
+
+    .detail-icon {
+      @include flex-center;
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: $card-shadow;
+
+      svg {
+        color: $primary-color;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: $text-secondary;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+  }
+}
+
+// Timeline
+.timeline {
+  position: relative;
+  padding-left: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: $border-color;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 24px;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -25px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: $primary-color;
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .timeline-content {
+      .timeline-title {
+        font-weight: 500;
+        color: $text-primary;
+        margin-bottom: 4px;
+      }
+
+      .timeline-date {
+        font-size: 14px;
+        color: $text-secondary;
+
+        .timeline-ago {
+          margin-left: 8px;
+          color: $text-secondary;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+
+// Stats Card
+.stats-card {
+  h3 {
+    margin: 0 0 24px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    .stat-item {
+      text-align: center;
+      padding: 20px;
+      background: $background-light;
+      border-radius: 12px;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      .stat-number {
+        font-size: 28px;
+        font-weight: 700;
+        color: $primary-color;
+        margin-bottom: 8px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: $text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+
+    .profile-avatar-section {
+      flex-direction: column;
+      text-align: center;
+
+      .profile-tags {
+        justify-content: center;
+      }
+    }
+
+    .header-actions {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .info-grid,
+  .details-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

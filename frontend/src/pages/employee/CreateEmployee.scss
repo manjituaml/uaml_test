@@ -1,0 +1,95 @@
+.create-emp-page {
+  min-height: 100vh;
+  background: #0b0f1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.create-emp-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 2.5rem 2.5rem 2.8rem;
+  width: 100%;
+  max-width: 520px;
+  color: #e5e7eb;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-bottom: 1.8rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  input, select {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem;
+    color: #e5e7eb;
+    font-size: 0.85rem;
+    outline: none;
+    transition: 0.2s ease;
+
+    &:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99,102,241,0.25);
+    }
+  }
+
+  .checks {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.4rem;
+
+    label {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    input {
+      accent-color: #6366f1;
+    }
+  }
+
+  button {
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, #6366f1, #22c55e);
+    border: none;
+    padding: 0.75rem;
+    border-radius: 12px;
+    color: #0b0f1a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+    }
+  }
+}
