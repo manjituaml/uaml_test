@@ -69,13 +69,13 @@ export const createOrder = async (req, res) => {
       itemNumber: itemNumber.trim(),
     });
     
-    if (existingOrder) {
-      return res.status(400).json({
-        success: false,
-        message: "Item number already exists",
-        existingItem: existingOrder.itemName,
-      });
-    }
+    // if (existingOrder) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Item number already exists",
+    //     existingItem: existingOrder.itemName,
+    //   });
+    // }
 
     // Calculate financial values
     const totalAmount = quantity * unitPrice;
