@@ -215,7 +215,7 @@ export const getAllOrders = async (req, res) => {
     const orders = await PurchaseOrder.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(parseInt(limit));
+      // .limit(parseInt(limit));
 
     // Enhance orders with calculated fields
     const enhancedOrders = orders.map(order => {
