@@ -1,5 +1,5 @@
 import PurchaseOrder from "../model/purchaseOrder.model.js";
-import User from "../model/userModel.js"
+import User from "../model/userModel.js";
 
 export const createOrder = async (req, res) => {
   try {
@@ -68,7 +68,7 @@ export const createOrder = async (req, res) => {
     const existingOrder = await PurchaseOrder.findOne({
       itemNumber: itemNumber.trim(),
     });
-    
+
     // if (existingOrder) {
     //   return res.status(400).json({
     //     success: false,
@@ -80,12 +80,14 @@ export const createOrder = async (req, res) => {
     // Calculate financial values
     const totalAmount = quantity * unitPrice;
     const currency = itemType === "Export" ? "USD" : "INR";
-    const calculatedExchangeRate = itemType === "Export" ? (exchangeRate || 0) : 0;
-    
+    const calculatedExchangeRate =
+      itemType === "Export" ? exchangeRate || 0 : 0;
+
     // Calculate total amount in INR for reporting
-    const totalAmountInINR = itemType === "Export" 
-      ? totalAmount * calculatedExchangeRate 
-      : totalAmount;
+    const totalAmountInINR =
+      itemType === "Export"
+        ? totalAmount * calculatedExchangeRate
+        : totalAmount;
 
     // Create new order
     const newOrder = new PurchaseOrder({
@@ -205,8 +207,8 @@ export const getAllOrders = async (req, res) => {
       query.$expr = {
         $and: [
           { $gt: ["$dispatchedQuantity", 0] },
-          { $lt: ["$dispatchedQuantity", "$quantity"] }
-        ]
+          { $lt: ["$dispatchedQuantity", "$quantity"] },
+        ],
       };
     }
 
@@ -214,27 +216,28 @@ export const getAllOrders = async (req, res) => {
 
     const orders = await PurchaseOrder.find(query)
       .sort({ createdAt: -1 })
-      .skip(skip)
-      // .limit(parseInt(limit));
+      .skip(skip);
+    // .limit(parseInt(limit));
 
     // Enhance orders with calculated fields
-    const enhancedOrders = orders.map(order => {
+    const enhancedOrders = orders.map((order) => {
       const orderObj = order.toObject();
       const dispatchedQuantity = order.dispatchedQuantity || 0;
       const remainingQuantity = order.quantity - dispatchedQuantity;
       const dispatchedValue = dispatchedQuantity * order.unitPrice;
       const remainingValue = remainingQuantity * order.unitPrice;
-      
+
       return {
         ...orderObj,
         remainingQuantity,
         dispatchedValue,
         remainingValue,
-        completionPercentage: order.quantity > 0 
-          ? ((dispatchedQuantity / order.quantity) * 100).toFixed(2)
-          : 0,
+        completionPercentage:
+          order.quantity > 0
+            ? ((dispatchedQuantity / order.quantity) * 100).toFixed(2)
+            : 0,
         // reflectAmount should equal remaining value
-        reflectAmount: remainingValue
+        reflectAmount: remainingValue,
       };
     });
 
@@ -252,13 +255,13 @@ export const getAllOrders = async (req, res) => {
           totalOrderValue: { $sum: "$totalAmount" },
           totalReflectAmount: { $sum: "$reflectAmount" },
           totalOrdersOpen: {
-            $sum: { $cond: [{ $eq: ["$closedItem", null] }, 1, 0] }
+            $sum: { $cond: [{ $eq: ["$closedItem", null] }, 1, 0] },
           },
           totalOrdersClosed: {
-            $sum: { $cond: [{ $ne: ["$closedItem", null] }, 1, 0] }
-          }
-        }
-      }
+            $sum: { $cond: [{ $ne: ["$closedItem", null] }, 1, 0] },
+          },
+        },
+      },
     ]);
 
     res.status(200).json({
@@ -274,7 +277,7 @@ export const getAllOrders = async (req, res) => {
         totalOrderValue: 0,
         totalReflectAmount: 0,
         totalOrdersOpen: 0,
-        totalOrdersClosed: 0
+        totalOrdersClosed: 0,
       },
       orders: enhancedOrders,
     });
@@ -307,35 +310,39 @@ export const getOrderById = async (req, res) => {
     const remainingQuantity = order.quantity - dispatchedQuantity;
     const isComplete = dispatchedQuantity >= order.quantity;
     const isPartial = dispatchedQuantity > 0 && !isComplete;
-    
+
     // Calculate financial metrics
     const dispatchedValue = dispatchedQuantity * order.unitPrice;
     const remainingValue = remainingQuantity * order.unitPrice;
-    
+
     // Calculate INR values for export orders
-    const totalAmountInINR = order.itemType === "Export" 
-      ? totalAmount * (order.exchangeRate || 1)
-      : totalAmount;
-    const dispatchedValueInINR = order.itemType === "Export"
-      ? dispatchedValue * (order.exchangeRate || 1)
-      : dispatchedValue;
-    const remainingValueInINR = order.itemType === "Export"
-      ? remainingValue * (order.exchangeRate || 1)
-      : remainingValue;
+    const totalAmountInINR =
+      order.itemType === "Export"
+        ? totalAmount * (order.exchangeRate || 1)
+        : totalAmount;
+    const dispatchedValueInINR =
+      order.itemType === "Export"
+        ? dispatchedValue * (order.exchangeRate || 1)
+        : dispatchedValue;
+    const remainingValueInINR =
+      order.itemType === "Export"
+        ? remainingValue * (order.exchangeRate || 1)
+        : remainingValue;
 
     // Enhance dispatches with financial data
-    const dispatchesWithValue = order.dispatches.map(dispatch => {
+    const dispatchesWithValue = order.dispatches.map((dispatch) => {
       const dispatchValue = dispatch.quantity * order.unitPrice;
-      const dispatchValueInINR = order.itemType === "Export"
-        ? dispatchValue * (order.exchangeRate || 1)
-        : dispatchValue;
-      
+      const dispatchValueInINR =
+        order.itemType === "Export"
+          ? dispatchValue * (order.exchangeRate || 1)
+          : dispatchValue;
+
       return {
         ...dispatch.toObject(),
         unitPrice: order.unitPrice,
         dispatchValue,
         dispatchValueInINR,
-        currency: order.currency
+        currency: order.currency,
       };
     });
 
@@ -353,8 +360,11 @@ export const getOrderById = async (req, res) => {
         remainingQuantity,
         isComplete,
         isPartial,
-        completionPercentage: ((dispatchedQuantity / order.quantity) * 100).toFixed(2),
-        dispatches: dispatchesWithValue
+        completionPercentage: (
+          (dispatchedQuantity / order.quantity) *
+          100
+        ).toFixed(2),
+        dispatches: dispatchesWithValue,
       },
     });
   } catch (error) {
@@ -466,9 +476,12 @@ export const updateOrder = async (req, res) => {
     if (action) updateData.action = action;
 
     // Update financial fields
-    const newQuantity = quantity !== undefined ? Number(quantity) : order.quantity;
-    const newUnitPrice = unitPrice !== undefined ? Number(unitPrice) : order.unitPrice;
-    const newExchangeRate = exchangeRate !== undefined ? Number(exchangeRate) : order.exchangeRate;
+    const newQuantity =
+      quantity !== undefined ? Number(quantity) : order.quantity;
+    const newUnitPrice =
+      unitPrice !== undefined ? Number(unitPrice) : order.unitPrice;
+    const newExchangeRate =
+      exchangeRate !== undefined ? Number(exchangeRate) : order.exchangeRate;
     const newItemType = itemType || order.itemType;
 
     // Recalculate total amount
@@ -477,7 +490,7 @@ export const updateOrder = async (req, res) => {
 
     // Update currency based on item type
     updateData.currency = newItemType === "Export" ? "USD" : "INR";
-    
+
     // Update exchange rate
     if (exchangeRate !== undefined || itemType) {
       updateData.exchangeRate = newItemType === "Export" ? newExchangeRate : 0;
@@ -523,6 +536,115 @@ export const updateOrder = async (req, res) => {
     });
   }
 };
+
+// Update order dispatch
+// export const updateDispatch = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { dispatchQuantity, dispatchDate, invoiceNumber, notes } = req.body;
+
+//     if (!dispatchQuantity || dispatchQuantity <= 0) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Valid dispatch quantity is required",
+//       });
+//     }
+
+//     const order = await PurchaseOrder.findById(id);
+
+//     if (!order) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Order not found",
+//       });
+//     }
+
+//     // Check if order is already closed
+//     if (order.closedItem) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Cannot update a closed order",
+//       });
+//     }
+
+//     // Calculate current total dispatched
+//     const currentDispatched = order.dispatches.reduce(
+//       (total, d) => total + d.quantity,
+//       0,
+//     );
+//     const remaining = order.quantity - currentDispatched;
+
+//     // Check if dispatch exceeds total quantity
+//     if (dispatchQuantity > remaining) {
+//       return res.status(400).json({
+//         success: false,
+//         message: `Dispatch quantity exceeds remaining quantity. Remaining: ${remaining}`,
+//       });
+//     }
+
+//     // Create new dispatch entry
+//     const newDispatch = {
+//       quantity: Number(dispatchQuantity),
+//       date: dispatchDate ? new Date(dispatchDate) : new Date(),
+//       invoiceNumber: invoiceNumber || `INV-${Date.now()}`,
+//       notes: notes || "",
+//     };
+
+//     // Add to dispatches array
+//     order.dispatches.push(newDispatch);
+
+//     // Calculate new total dispatched
+//     const newTotalDispatched = currentDispatched + Number(dispatchQuantity);
+
+//     // Update reflectAmount (remaining value)
+//     const remainingQuantity = order.quantity - newTotalDispatched;
+//     order.reflectAmount = remainingQuantity * order.unitPrice;
+
+//     // Check if order is complete
+//     if (newTotalDispatched >= order.quantity) {
+//       order.closedItem = new Date();
+//       order.action = "dispatch";
+//       order.reflectAmount = 0; // No remaining value when complete
+//     }
+
+//     const updatedOrder = await order.save();
+
+//     // Calculate values for response
+//     const totalDispatchedNow = updatedOrder.dispatches.reduce(
+//       (total, d) => total + d.quantity,
+//       0,
+//     );
+//     const remainingNow = order.quantity - totalDispatchedNow;
+//     const dispatchValue = dispatchQuantity * order.unitPrice;
+//     const remainingValue = remainingNow * order.unitPrice;
+
+//     res.status(200).json({
+//       success: true,
+//       message: `Dispatched ${dispatchQuantity} units successfully`,
+//       order: updatedOrder,
+//       dispatchDetails: {
+//         dispatchValue,
+//         dispatchCurrency: order.currency,
+//         exchangeRate: order.exchangeRate
+//       },
+//       remaining: remainingNow,
+//       remainingValue,
+//       reflectAmount: remainingValue,
+//       isComplete: updatedOrder.closedItem !== null,
+//       newDispatch: {
+//         ...newDispatch,
+//         dispatchValue
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error updating dispatch:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//       error: error.message,
+//     });
+//   }
+// };
 
 // Update order dispatch
 export const updateDispatch = async (req, res) => {
@@ -582,7 +704,7 @@ export const updateDispatch = async (req, res) => {
 
     // Calculate new total dispatched
     const newTotalDispatched = currentDispatched + Number(dispatchQuantity);
-    
+
     // Update reflectAmount (remaining value)
     const remainingQuantity = order.quantity - newTotalDispatched;
     order.reflectAmount = remainingQuantity * order.unitPrice;
@@ -592,6 +714,9 @@ export const updateDispatch = async (req, res) => {
       order.closedItem = new Date();
       order.action = "dispatch";
       order.reflectAmount = 0; // No remaining value when complete
+    } else {
+      // *** FIX: If there are remaining items, reset action to "pending" ***
+      order.action = "pending";
     }
 
     const updatedOrder = await order.save();
@@ -612,7 +737,7 @@ export const updateDispatch = async (req, res) => {
       dispatchDetails: {
         dispatchValue,
         dispatchCurrency: order.currency,
-        exchangeRate: order.exchangeRate
+        exchangeRate: order.exchangeRate,
       },
       remaining: remainingNow,
       remainingValue,
@@ -620,7 +745,13 @@ export const updateDispatch = async (req, res) => {
       isComplete: updatedOrder.closedItem !== null,
       newDispatch: {
         ...newDispatch,
-        dispatchValue
+        dispatchValue,
+      },
+      // Add this to inform the frontend about the status change
+      statusUpdate: {
+        previousAction: order.action,
+        newAction: "pending",
+        reason: "Partial dispatch - order reset to pending",
       },
     });
   } catch (error) {
@@ -650,18 +781,19 @@ export const getDispatchHistory = async (req, res) => {
     }
 
     // Calculate dispatch values
-    const dispatchesWithValue = order.dispatches.map(dispatch => {
+    const dispatchesWithValue = order.dispatches.map((dispatch) => {
       const dispatchValue = dispatch.quantity * order.unitPrice;
-      const dispatchValueInINR = order.itemType === "Export"
-        ? dispatchValue * (order.exchangeRate || 1)
-        : dispatchValue;
+      const dispatchValueInINR =
+        order.itemType === "Export"
+          ? dispatchValue * (order.exchangeRate || 1)
+          : dispatchValue;
 
       return {
         ...dispatch.toObject(),
         unitPrice: order.unitPrice,
         dispatchValue,
         dispatchValueInINR,
-        currency: order.currency
+        currency: order.currency,
       };
     });
 
@@ -704,13 +836,13 @@ export const getFinancialSummary = async (req, res) => {
     const { startDate, endDate, itemType, currency } = req.query;
 
     const matchStage = {};
-    
+
     if (startDate || endDate) {
       matchStage.createdAt = {};
       if (startDate) matchStage.createdAt.$gte = new Date(startDate);
       if (endDate) matchStage.createdAt.$lte = new Date(endDate);
     }
-    
+
     if (itemType) matchStage.itemType = itemType;
     if (currency) matchStage.currency = currency;
 
@@ -727,33 +859,33 @@ export const getFinancialSummary = async (req, res) => {
                 totalDispatchedQuantity: { $sum: "$dispatchedQuantity" },
                 totalOrderValue: { $sum: "$totalAmount" },
                 totalReflectAmount: { $sum: "$reflectAmount" },
-                totalDispatchedValue: { 
-                  $sum: { 
-                    $multiply: ["$dispatchedQuantity", "$unitPrice"] 
-                  }
+                totalDispatchedValue: {
+                  $sum: {
+                    $multiply: ["$dispatchedQuantity", "$unitPrice"],
+                  },
                 },
                 openOrders: {
-                  $sum: { $cond: [{ $eq: ["$closedItem", null] }, 1, 0] }
+                  $sum: { $cond: [{ $eq: ["$closedItem", null] }, 1, 0] },
                 },
                 closedOrders: {
-                  $sum: { $cond: [{ $ne: ["$closedItem", null] }, 1, 0] }
+                  $sum: { $cond: [{ $ne: ["$closedItem", null] }, 1, 0] },
                 },
                 partialOrders: {
-                  $sum: { 
+                  $sum: {
                     $cond: [
-                      { 
+                      {
                         $and: [
                           { $gt: ["$dispatchedQuantity", 0] },
-                          { $lt: ["$dispatchedQuantity", "$quantity"] }
-                        ]
-                      }, 
-                      1, 
-                      0
-                    ]
-                  }
-                }
-              }
-            }
+                          { $lt: ["$dispatchedQuantity", "$quantity"] },
+                        ],
+                      },
+                      1,
+                      0,
+                    ],
+                  },
+                },
+              },
+            },
           ],
           byItemType: [
             {
@@ -761,33 +893,32 @@ export const getFinancialSummary = async (req, res) => {
                 _id: "$itemType",
                 count: { $sum: 1 },
                 totalValue: { $sum: "$totalAmount" },
-                totalReflectAmount: { $sum: "$reflectAmount" }
-              }
-            }
+                totalReflectAmount: { $sum: "$reflectAmount" },
+              },
+            },
           ],
           byCurrency: [
             {
               $group: {
                 _id: "$currency",
                 count: { $sum: 1 },
-                totalValue: { $sum: "$totalAmount" }
-              }
-            }
-          ]
-        }
-      }
+                totalValue: { $sum: "$totalAmount" },
+              },
+            },
+          ],
+        },
+      },
     ]);
 
     res.status(200).json({
       success: true,
-      summary: summary[0]
+      summary: summary[0],
     });
-
   } catch (error) {
     console.error("Error generating financial summary:", error);
     res.status(500).json({
       success: false,
-      message: "Server error"
+      message: "Server error",
     });
   }
 };
@@ -824,7 +955,7 @@ export const closeOrder = async (req, res) => {
     order.closedItem = new Date();
     order.action = "dispatch";
     order.reflectAmount = 0; // No remaining value when closed
-    
+
     const updatedOrder = await order.save();
 
     res.status(200).json({
@@ -836,8 +967,8 @@ export const closeOrder = async (req, res) => {
         totalDispatchedValue: order.dispatchedQuantity * order.unitPrice,
         reflectAmount: 0,
         currency: order.currency,
-        closedDate: order.closedItem
-      }
+        closedDate: order.closedItem,
+      },
     });
   } catch (error) {
     console.error("Error closing order:", error);
@@ -852,11 +983,17 @@ export const closeOrder = async (req, res) => {
 export const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    const adminId =  req.user;
+    const adminId = req.user;
     const user = await User.findById(adminId);
 
-    if(!user) return res.status(404).json({success: false, message: 'User not found'});
-    if(!user?.isAdmin) return res.status(404).json({success: false, message: 'Only Admin can delete orders'});
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    if (!user?.isAdmin)
+      return res
+        .status(404)
+        .json({ success: false, message: "Only Admin can delete orders" });
 
     const order = await PurchaseOrder.findById(id);
 
@@ -902,7 +1039,10 @@ export const bulkUpdateDispatchStatus = async (req, res) => {
       });
     }
 
-    if (!action || !["pending", "ready", "invoice ready", "dispatch"].includes(action)) {
+    if (
+      !action ||
+      !["pending", "ready", "invoice ready", "dispatch"].includes(action)
+    ) {
       return res.status(400).json({
         success: false,
         message: "Valid action is required",
@@ -911,7 +1051,7 @@ export const bulkUpdateDispatchStatus = async (req, res) => {
 
     const result = await PurchaseOrder.updateMany(
       { _id: { $in: orderIds }, closedItem: null },
-      { $set: { action } }
+      { $set: { action } },
     );
 
     res.status(200).json({
