@@ -987,7 +987,7 @@ export const deleteOrder = async (req, res) => {
     const user = await User.findById(adminId);
 
     if (!user)
-      return res
+      return res 
         .status(404)
         .json({ success: false, message: "User not found" });
     if (!user?.isAdmin)
