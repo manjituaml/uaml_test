@@ -18,8 +18,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(
   cors({
-    // origin: ["https://uaml.onrender.com", "http://localhost:5173"], // React dev server
-    origin: ["http://localhost:5173"], // React dev server
+    origin: ["https://uaml.onrender.com", "http://localhost:5173"], // React dev server
+    // origin: ["http://localhost:5173"], // React dev server
     credentials: true,
   }),
 );
