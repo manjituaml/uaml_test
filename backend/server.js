@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./utils/db.js";
 import userRoutes from "./route/user.route.js";
 import orderRoutes from "./route/order.route.js";
+import invoiceRoutes from "./route/invoice.route.js";
 import cookieParser from "cookie-parser";
 import fetch from "node-fetch";
 
@@ -39,6 +40,7 @@ app.get("/health", (req, res) => {
 
 app.use("/uampi/users", userRoutes);
 app.use("/uampi/orders", orderRoutes);
+app.use("/uampi/invoice", invoiceRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

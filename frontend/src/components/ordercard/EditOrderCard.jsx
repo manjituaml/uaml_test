@@ -18,7 +18,11 @@ import {
   FileCheck,
   Truck as TruckIcon,
 } from "lucide-react";
-import { baseOrderUrlPrefix, baseUrl } from "../../utils/baseUrl";
+import {
+  baseInvoiceUrlPrefix,
+  baseOrderUrlPrefix,
+  baseUrl,
+} from "../../utils/baseUrl";
 import "./EditOrderCard.scss";
 import { useSelector } from "react-redux";
 
@@ -321,6 +325,7 @@ function EditOrderCard() {
         setSuccessMessage(
           `Dispatched ${dispatchData.dispatchQuantity} units successfully! Invoice: ${res.data.newDispatch?.invoiceNumber || "Generated"}`,
         );
+        await recordDispatch();
 
         // Reset form
         setDispatchData({
@@ -349,6 +354,34 @@ function EditOrderCard() {
       setSaving(false);
     }
   };
+
+  const recordDispatch = async () => {
+    try {
+      const invoicePayload = {
+        invoiceDate: dispatchData.dispatchDate,
+        order: orderDetails._id, // order id
+        invoiceNumber: dispatchData.invoiceNumber,
+        quantity: dispatchData.dispatchQuantity,
+        unitPrice: orderDetails.unitPrice,
+        itemType: orderDetails.itemType,
+        exchangeRate: orderDetails.exchangeRate || 0,
+        purchaseOrderNumber: orderDetails.itemNumber,
+      };
+
+      const res = await axios.post(
+        `${baseUrl}${baseInvoiceUrlPrefix}/create`,
+        invoicePayload,
+        { withCredentials: true },
+      );
+
+      if (res.data.success) {
+        // console.log("Invoice created:", res.data.invoice);
+      }
+    } catch (error) {
+      console.error("Invoice creation failed:", error);
+    }
+  };
+
   const handleCloseOrder = async () => {
     if (!isSalesSenior) {
       alert(`Only 'Sales Department' can close the order`);

@@ -4,3 +4,4 @@
 export const baseUrl = `https://uamlbackend.onrender.com`;
 export const baseUserUrlPrefix = `/uampi/users`;
 export const baseOrderUrlPrefix = `/uampi/orders`;
+export const baseInvoiceUrlPrefix = `/uampi/invoice`;
