@@ -14,6 +14,7 @@ function Layout() {
       [{ headName: "Employee", url: "employee" }]
       : []),
     { headName: "Orders", url: "order" },
+    { headName: "Invoice", url: "invoice" },
     ...(user
       ? [{ headName: "Logout", url: "logout" }]
       : [{ headName: "Login", url: "login" }]),

@@ -11,6 +11,6 @@ router.get("/all",isAuthentication, getAllInvoices);
 
 router.get("/range/:fromDate/:tillDate",isAuthentication, invoices);
 
-router.get("/current-month",isAuthentication, currentMonthInvoices);
+router.get("/currentmonth",isAuthentication, currentMonthInvoices);
 
 export default router;

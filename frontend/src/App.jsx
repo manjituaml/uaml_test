@@ -10,6 +10,7 @@ import EditEmployee from "./pages/employee/EditEmployee";
 import EditOrderCard from "./components/ordercard/EditOrderCard";
 import Login from "./pages/auth/Login";
 import Logout from "./pages/auth/Logout";
+import Invoices from "./pages/invoice/Invoices";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/order" element={<OrderList />} />
         <Route path="/order/create" element={<CreateOrderCard />} />
         <Route path="/order/:id/edit" element={<EditOrderCard />} />
+        <Route path="/invoice" element={<Invoices />} />
         <Route path="/employee" element={<Employee />} />
         <Route path="/employee/create" element={<CreateEmployee />} />
         <Route path="/employee/:empolyeeId" element={<EmployeeProfile />} />
