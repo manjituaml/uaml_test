@@ -242,7 +242,7 @@ function OrderList() {
 
       {/* Quick Stats */}
       <div className="quick-stats-grid">
-        <div className="stat-card">
+        <div className="stat-card" onClick={()=>setStatusFilter('pending')}>
           <div className="stat-icon pending">
             <Clock size={20} />
           </div>
@@ -251,7 +251,7 @@ function OrderList() {
             <div className="stat-label">Pending</div>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" onClick={()=>setStatusFilter('ready')} >
           <div className="stat-icon ready">
             <CheckCircle size={20} />
           </div>
@@ -260,7 +260,7 @@ function OrderList() {
             <div className="stat-label">Ready</div>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" onClick={()=>setStatusFilter('invoice')}>
           <div className="stat-icon invoice">
             <FileText size={20} />
           </div>
@@ -269,7 +269,7 @@ function OrderList() {
             <div className="stat-label">Invoice Ready</div>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" onClick={()=>setStatusFilter('dispatch')}>
           <div className="stat-icon dispatch">
             <Package size={20} />
           </div>
