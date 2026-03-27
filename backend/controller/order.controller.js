@@ -13,6 +13,7 @@ export const createOrder = async (req, res) => {
       plannedDispatchDate,
       action,
       exchangeRate,
+      podate,
     } = req.body;
 
     // Validate required fields
@@ -108,6 +109,7 @@ export const createOrder = async (req, res) => {
         ? new Date(plannedDispatchDate)
         : null,
       closedItem: null,
+      podate: podate ? new Date(podate) : null,
     });
 
     // Save to database
@@ -130,6 +132,7 @@ export const createOrder = async (req, res) => {
         totalAmount: savedOrder.totalAmount,
         reflectAmount: savedOrder.reflectAmount,
         plannedDispatchDate: savedOrder.plannedDispatchDate,
+        podate: savedOrder.podate,
         action: savedOrder.action,
         createdAt: savedOrder.createdAt,
       },
@@ -390,6 +393,7 @@ export const updateOrder = async (req, res) => {
       exchangeRate,
       plannedDispatchDate,
       action,
+      podate,
     } = req.body;
 
     // Find the order
@@ -504,6 +508,10 @@ export const updateOrder = async (req, res) => {
       updateData.plannedDispatchDate = plannedDispatchDate
         ? new Date(plannedDispatchDate)
         : null;
+    }
+
+    if (podate !== undefined) {
+      updateData.podate = podate ? new Date(podate) : null;
     }
 
     // Update the order
@@ -987,7 +995,7 @@ export const deleteOrder = async (req, res) => {
     const user = await User.findById(adminId);
 
     if (!user)
-      return res 
+      return res
         .status(404)
         .json({ success: false, message: "User not found" });
     if (!user?.isAdmin)

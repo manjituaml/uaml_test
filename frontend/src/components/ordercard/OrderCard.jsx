@@ -90,6 +90,7 @@ function OrderCard({ item, onClick }) {
             {statusConfig.label}
           </div>
         </div>
+        {item.podate ? new Date(item.podate).toLocaleDateString() : ''}
         <div className="customer-info">
           <User size={14} />
           <span className="customer-name">{item.customerName}</span>
@@ -125,6 +126,7 @@ function OrderCard({ item, onClick }) {
               <span className="detail-label">Total Amount</span>
               <span className="detail-value">{item?.itemType === "Domestic" ? `₹` : '$'} {amount?.toFixed(2)}</span>
             </div>
+              
           </div>
         </div>
 

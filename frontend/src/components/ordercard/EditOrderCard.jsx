@@ -47,6 +47,7 @@ function EditOrderCard() {
     action: "",
     plannedDispatchDate: "",
     exchangeRate: "",
+    podate: "",
   });
 
   const [orderDetails, setOrderDetails] = useState(null);
@@ -123,6 +124,7 @@ function EditOrderCard() {
           plannedDispatchDate: order.plannedDispatchDate
             ? new Date(order.plannedDispatchDate).toISOString().split("T")[0]
             : "",
+          podate: order.podate || "",
         });
 
         // Set file preview if exists
@@ -622,6 +624,18 @@ function EditOrderCard() {
                 </div>
 
                 <div className="form-group">
+                  <label>PO date</label>
+                  <h3>
+                    {formData?.podate
+                      ? new Date(formData.podate).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "-"}
+                  </h3>
+                </div>
+                <div className="form-group">
                   <label>
                     <Package size={16} />
                     Item Name *
@@ -642,7 +656,7 @@ function EditOrderCard() {
                 <div className="form-group">
                   <label>
                     <Package size={16} />
-                    Item Number *
+                    PO Number *
                   </label>
                   <input
                     type="text"

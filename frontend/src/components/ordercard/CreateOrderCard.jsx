@@ -14,18 +14,19 @@ function CreateOrderCard() {
     unitPrice: "",
     exchangeRate: "", // New field for export orders
     plannedDispatchDate: "",
+    podate: "",
   });
-  
+
   const { user, isAdmin, isHead } = useSelector((store) => store.auth);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
-  
+
   // Calculate derived values
   const [calculatedValues, setCalculatedValues] = useState({
     totalAmount: 0,
     totalAmountInINR: 0,
-    currency: "INR"
+    currency: "INR",
   });
 
   // Update calculated values when form changes
@@ -34,19 +35,24 @@ function CreateOrderCard() {
     const unitPrice = Number(orderForm.unitPrice) || 0;
     const exchangeRate = Number(orderForm.exchangeRate) || 0;
     const isExport = orderForm.itemType === "Export";
-    
+
     const totalAmount = quantity * unitPrice;
     const currency = isExport ? "USD" : "INR";
-    const totalAmountInINR = isExport 
-      ? totalAmount * exchangeRate 
+    const totalAmountInINR = isExport
+      ? totalAmount * exchangeRate
       : totalAmount;
 
     setCalculatedValues({
       totalAmount,
       totalAmountInINR,
-      currency
+      currency,
     });
-  }, [orderForm.quantity, orderForm.unitPrice, orderForm.exchangeRate, orderForm.itemType]);
+  }, [
+    orderForm.quantity,
+    orderForm.unitPrice,
+    orderForm.exchangeRate,
+    orderForm.itemType,
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +95,8 @@ function CreateOrderCard() {
     // Validate exchange rate for Export orders
     if (orderForm.itemType === "Export") {
       if (!orderForm.exchangeRate || orderForm.exchangeRate <= 0) {
-        newErrors.exchangeRate = "Exchange rate is required for Export orders (greater than 0)";
+        newErrors.exchangeRate =
+          "Exchange rate is required for Export orders (greater than 0)";
       }
     }
 
@@ -103,7 +110,7 @@ function CreateOrderCard() {
     if (!validateForm()) {
       return;
     }
-    
+
     if (!isAdmin && !isHead) {
       return setErrors({
         submit: "Either Admin or Head can perform this action.",
@@ -127,6 +134,10 @@ function CreateOrderCard() {
       if (orderForm.itemType === "Export") {
         orderData.exchangeRate = Number(orderForm.exchangeRate);
       }
+      
+      if (orderForm.podate) {
+        orderData.podate = orderForm.podate;
+      }
 
       // Add plannedDispatchDate if provided
       if (orderForm.plannedDispatchDate) {
@@ -146,7 +157,7 @@ function CreateOrderCard() {
 
       if (res.data.success) {
         setSuccess("Order Created Successfully ✅");
-
+        console.log(res?.data?.order)
         // Reset form
         setOrderForm({
           customerName: "",
@@ -157,6 +168,7 @@ function CreateOrderCard() {
           unitPrice: "",
           exchangeRate: "",
           plannedDispatchDate: "",
+          podate: "",
         });
 
         // Clear success message after 3 seconds
@@ -269,7 +281,9 @@ function CreateOrderCard() {
             </div>
 
             <div className="form_group">
-              <label>Unit Price ({orderForm.itemType === "Export" ? "USD" : "INR"}) *</label>
+              <label>
+                Unit Price ({orderForm.itemType === "Export" ? "USD" : "INR"}) *
+              </label>
               <input
                 type="number"
                 min="0.01"
@@ -310,29 +324,46 @@ function CreateOrderCard() {
           )}
 
           {/* Calculated Values Preview */}
-          {(Number(orderForm.quantity) > 0 && Number(orderForm.unitPrice) > 0) && (
-            <div className="calculated_values">
-              <h4>Order Summary</h4>
-              <div className="value_row">
-                <span>Total Amount:</span>
-                <strong>
-                  {calculatedValues.currency} {calculatedValues.totalAmount.toFixed(2)}
-                </strong>
-              </div>
-              {orderForm.itemType === "Export" && Number(orderForm.exchangeRate) > 0 && (
+          {Number(orderForm.quantity) > 0 &&
+            Number(orderForm.unitPrice) > 0 && (
+              <div className="calculated_values">
+                <h4>Order Summary</h4>
                 <div className="value_row">
-                  <span>Total Amount (INR):</span>
-                  <strong>₹ {calculatedValues.totalAmountInINR.toFixed(2)}</strong>
+                  <span>Total Amount:</span>
+                  <strong>
+                    {calculatedValues.currency}{" "}
+                    {calculatedValues.totalAmount.toFixed(2)}
+                  </strong>
                 </div>
-              )}
-              <div className="value_row">
-                <span>Reflect Amount (Initial):</span>
-                <strong>
-                  {calculatedValues.currency} {calculatedValues.totalAmount.toFixed(2)}
-                </strong>
+                {orderForm.itemType === "Export" &&
+                  Number(orderForm.exchangeRate) > 0 && (
+                    <div className="value_row">
+                      <span>Total Amount (INR):</span>
+                      <strong>
+                        ₹ {calculatedValues.totalAmountInINR.toFixed(2)}
+                      </strong>
+                    </div>
+                  )}
+                <div className="value_row">
+                  <span>Reflect Amount (Initial):</span>
+                  <strong>
+                    {calculatedValues.currency}{" "}
+                    {calculatedValues.totalAmount.toFixed(2)}
+                  </strong>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+          <div className="form_group">
+            <label>PO Date</label>
+            <input
+              type="date"
+              name="podate"
+              value={orderForm.podate}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
           <div className="form_group">
             <label>Planned Dispatch Date (Optional)</label>
@@ -341,15 +372,11 @@ function CreateOrderCard() {
               name="plannedDispatchDate"
               value={orderForm.plannedDispatchDate}
               onChange={handleChange}
-              min={new Date().toISOString().split('T')[0]} // Can't select past dates
+              min={new Date().toISOString().split("T")[0]} // Can't select past dates
             />
           </div>
 
-          <button 
-            type="submit" 
-            className="btn_submit" 
-            disabled={loading}
-          >
+          <button type="submit" className="btn_submit" disabled={loading}>
             {loading ? "Creating..." : "Create Order"}
           </button>
         </form>

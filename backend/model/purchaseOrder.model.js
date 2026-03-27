@@ -24,6 +24,7 @@ const purchaseItemSchema = new mongoose.Schema({
   dispatches: [dispatchSchema],
   dispatchedQuantity: { type: Number, default: 0 },
   closedItem: { type: Date },
+  podate: { type: Date },
 }, { timestamps: true });
 
 purchaseItemSchema.pre("save", function () {
