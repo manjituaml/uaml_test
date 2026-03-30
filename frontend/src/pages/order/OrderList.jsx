@@ -21,6 +21,8 @@ import {
   FileText,
 } from "lucide-react";
 import { useSelector } from "react-redux";
+import OrderCard2 from "../../components/ordercard/OrderCard2";
+import OrderRow from "../../components/ordercard/OrderRow";
 
 function OrderList() {
   const navigate = useNavigate();
@@ -31,33 +33,7 @@ function OrderList() {
   const [itemTypeFilter, setItemTypeFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
 
-  // console.log(orders)
-  // const domesticOrders = (orders || []).filter(
-  //   (o) => o?.itemType?.toLowerCase() === "domestic",
-  // );
-
-  // const domesticPrice = domesticOrders?.reduce(
-  //   (total, order) => total + (order?.reflectAmount || 0),
-  //   0,
-  // );
-
-  // const exportOrders = (orders || []).filter(
-  //   (o) => o?.itemType?.toLowerCase() === "export",
-  // );
-
-  // const exportPrice = exportOrders?.reduce(
-  //   (total, order) => total + (order?.reflectAmount || 0),
-  //   0,
-  // );
-
-  // const exportPriceInINR = exportOrders?.reduce(
-  //   (total, order) => total + (order?.reflectAmount * order?.exchangeRate || 0),
-  //   0,
-  // );
-
-  // console.log(orders);
-  // console.log("Domestic Orders:", domesticOrders);
-  // console.log("Export Orders:", exportOrders);
+  const [viewMode, setViewMode] = useState("grid"); // grid / list // list / grid
 
   const totals = (orders || []).reduce(
     (acc, order) => {
@@ -224,7 +200,6 @@ function OrderList() {
               </span>
             </div>
           </div>
-          
         </div>
 
         {(isAdmin || isHead) && (
@@ -242,7 +217,7 @@ function OrderList() {
 
       {/* Quick Stats */}
       <div className="quick-stats-grid">
-        <div className="stat-card" onClick={()=>setStatusFilter('pending')}>
+        <div className="stat-card" onClick={() => setStatusFilter("pending")}>
           <div className="stat-icon pending">
             <Clock size={20} />
           </div>
@@ -251,7 +226,7 @@ function OrderList() {
             <div className="stat-label">Pending</div>
           </div>
         </div>
-        <div className="stat-card" onClick={()=>setStatusFilter('ready')} >
+        <div className="stat-card" onClick={() => setStatusFilter("ready")}>
           <div className="stat-icon ready">
             <CheckCircle size={20} />
           </div>
@@ -260,7 +235,7 @@ function OrderList() {
             <div className="stat-label">Ready</div>
           </div>
         </div>
-        <div className="stat-card" onClick={()=>setStatusFilter('invoice')}>
+        <div className="stat-card" onClick={() => setStatusFilter("invoice")}>
           <div className="stat-icon invoice">
             <FileText size={20} />
           </div>
@@ -269,7 +244,7 @@ function OrderList() {
             <div className="stat-label">Invoice Ready</div>
           </div>
         </div>
-        <div className="stat-card" onClick={()=>setStatusFilter('dispatch')}>
+        <div className="stat-card" onClick={() => setStatusFilter("dispatch")}>
           <div className="stat-icon dispatch">
             <Package size={20} />
           </div>
@@ -366,9 +341,22 @@ function OrderList() {
           </button>
         </div>
       </div>
+      <div className="view-toggle">
+        <button
+          className={viewMode === "grid" ? "active" : ""}
+          onClick={() => setViewMode("grid")}
+        >
+          Grid
+        </button>
 
+        <button
+          className={viewMode === "list" ? "active" : ""}
+          onClick={() => setViewMode("list")}
+        >
+          List
+        </button>
+      </div>
       {/* Orders Grid */}
-      <div className="orders-grid">
         {sortedOrders.length === 0 ? (
           <div className="no-results">
             <Package size={48} />
@@ -382,16 +370,32 @@ function OrderList() {
               Create Your First Order
             </button>
           </div>
+        ) : viewMode === "grid" ? (
+          <div className="orders-grid">
+            {sortedOrders.map((order) => (
+              <OrderCard
+                key={order._id}
+                item={order}
+                onClick={() => navigate(`/order/${order._id}/edit`)}
+              />
+            ))}
+          </div>
         ) : (
-          sortedOrders.map((order) => (
-            <OrderCard
-              key={order._id}
-              item={order}
-              onClick={() => navigate(`/order/${order._id}/edit`)}
-            />
-          ))
+          <div className="orders-list">
+            <table>
+              <OrderCard2 /> {/* Header */}
+              <tbody>
+                {sortedOrders.map((order) => (
+                  <OrderRow
+                    key={order._id}
+                    item={order}
+                    onClick={() => navigate(`/order/${order._id}/edit`)}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
-      </div>
     </div>
   );
 }

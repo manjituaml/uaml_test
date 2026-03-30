@@ -1,0 +1,278 @@
+// OrderCard2.scss - Modern Premium Design
+
+// Variables
+$primary: #6366f1;
+$primary-dark: #4f46e5;
+$primary-light: #818cf8;
+$success: #10b981;
+$danger: #ef4444;
+$warning: #f59e0b;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$border: #e5e7eb;
+$bg-hover: #f9fafb;
+
+.ordercard2 {
+  background: $primary;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  
+  th {
+    padding: 18px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    &:first-child {
+      padding-left: 24px;
+      border-top-left-radius: 0;
+    }
+    
+    &:last-child {
+      padding-right: 24px;
+      border-top-right-radius: 0;
+    }
+  }
+}
+
+.orders-list {
+  background: white;
+  border-radius: 0;
+  overflow: auto;
+  height: 100%;
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+  }
+  
+  // Table header (if you have a second header)
+  &:not(.ordercard2) th {
+    background: #f8fafc;
+    padding: 14px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $text-secondary;
+    border-bottom: 1px solid $border;
+  }
+  
+  td {
+    padding: 16px;
+    font-size: 0.875rem;
+    color: $text-primary;
+    border-bottom: 1px solid $border;
+    transition: all 0.15s ease;
+    
+    &:first-child {
+      padding-left: 24px;
+      font-weight: 500;
+    }
+    
+    &:last-child {
+      padding-right: 24px;
+    }
+  }
+  
+  tr {
+    transition: all 0.15s ease;
+    
+    &:hover {
+      background-color: $bg-hover;
+    }
+  }
+  
+  // Amount columns styling
+  td:nth-child(6),
+  td:nth-child(7) {
+    font-weight: 600;
+    color: $text-primary;
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+  
+  // Remaining quantity styling
+  td:last-child {
+    font-weight: 600;
+    
+    [data-status="high"] {
+      color: $success;
+      background: #d1fae5;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.75rem;
+    }
+    
+    [data-status="low"] {
+      color: $warning;
+      background: #fed7aa;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.75rem;
+    }
+    
+    [data-status="zero"] {
+      color: $danger;
+      background: #fee2e2;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// If you want a completely different approach - Card Style Table
+.orders-list-card {
+  padding: 24px;
+  background: #f3f4f6;
+  
+  table {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .ordercard2 {
+    background: white;
+    border-bottom: 1px solid $border;
+    
+    th {
+      color: $text-secondary;
+      font-weight: 600;
+      font-size: 0.7rem;
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid $border;
+    }
+  }
+  
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tr:hover td {
+    background: #fefce8;
+  }
+}
+
+// Minimal & Clean Alternative
+.orders-list-minimal {
+  margin: 0;
+  
+  .ordercard2 {
+    background: transparent;
+    
+    th {
+      color: $text-secondary;
+      font-weight: 500;
+      padding: 12px 0;
+      border-bottom: 1px solid $border;
+    }
+  }
+  
+  table {
+    background: transparent;
+  }
+  
+  td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tr:hover td {
+    color: $primary;
+  }
+}
+
+// Dark Mode Version
+@media (prefers-color-scheme: dark) {
+  .orders-list {
+    background: #1f2937;
+    
+    table {
+      background: #1f2937;
+    }
+    
+    td {
+      color: #e5e7eb;
+      border-bottom-color: #374151;
+    }
+    
+    tr:hover {
+      background-color: #374151;
+    }
+    
+    td:nth-child(6),
+    td:nth-child(7) {
+      color: #e5e7eb;
+    }
+  }
+  
+  .ordercard2 {
+    background: #111827;
+    
+    th {
+      color: #9ca3af;
+      border-bottom-color: #374151;
+    }
+  }
+}
+
+// Smooth scrolling
+.orders-list {
+  scroll-behavior: smooth;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+}
+
+// Animation for new rows
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.orders-list tbody tr {
+  animation: slideIn 0.2s ease-out;
+}
