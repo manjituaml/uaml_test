@@ -3,6 +3,8 @@
   min-height: 100vh;
   background: #f5f7fb;
   font-family: "Segoe UI", sans-serif;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .app_head {
@@ -64,7 +66,9 @@
   
   &:hover{
     color: #fff;
-    background: #0800ff;
+    // background: #0800ff;
+    // text-decoration: underline;
+    border-bottom: 0.15rem solid #0800ff;
     
   }
 }
