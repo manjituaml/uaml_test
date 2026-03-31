@@ -33,7 +33,7 @@ function OrderList() {
   const [itemTypeFilter, setItemTypeFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
 
-  const [viewMode, setViewMode] = useState("grid"); // grid / list // list / grid
+  const [viewMode, setViewMode] = useState("list"); // grid / list // list / grid
 
   const totals = (orders || []).reduce(
     (acc, order) => {

@@ -11,6 +11,8 @@
   align-items: center;
   padding: 16px 24px;
   background: #ffffff;
+  background: #353535;
+  // background: #101010;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   flex-wrap: wrap;
   gap: 12px;
@@ -49,19 +51,21 @@
   gap: 16px;
   align-items: center;
   font-weight: 700;
+  color: rgb(175, 170, 170);
 }
 
 .headListing li {
   font-size: 14px;
   font-weight: 500;
-  color: #444;
+  color: #bdbdbd;
   cursor: pointer;
   padding: 6px 10px;
-  border-radius: 6px;
-
+  border-radius: 0px;
+  
   &:hover{
     color: #fff;
     background: #0800ff;
+    
   }
 }
 

@@ -34,8 +34,10 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
 // Main Container
 .orders-modern-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  // background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   padding: 24px;
+  background: rgb(168, 168, 168);
+  background: rgb(62, 62, 62);
   font-family:
     "Inter",
     -apple-system,
@@ -90,12 +92,13 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
 .page-header {
   background: white;
 
-  border-radius: 16px;
-  padding: 32px;
+  border-radius: 2px !important;
+  padding: 0px 10px !important;
   margin-bottom: 24px;
   box-shadow: $card-shadow;
   @include flex-between;
   gap: 24px;
+  // border: 2px solid red;
 
   .header-left {
     @include flex-center;
@@ -106,9 +109,9 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
       @include flex-center;
       width: 64px;
       height: 64px;
-      background: linear-gradient(135deg, $primary-color, $primary-hover);
-      
-      border-radius: 16px;
+      // background: linear-gradient(135deg, $primary-color, $primary-hover);
+      background: black !important;
+      border-radius: 0px;
       color: white;
     }
     
@@ -184,10 +187,11 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
   
   .stat-card {
     background: white;
-    background: linear-gradient(145deg, red, black);
-    border-radius: 12px;
+    // background: linear-gradient(145deg, red, black);
+    border-radius: 0px;
     padding: 20px;
     box-shadow: $card-shadow;
+    cursor: pointer;
     @include flex-center;
     gap: 16px;
     transition: transform 0.2s;
@@ -243,7 +247,7 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
 // Controls Section
 .controls-section {
   background: white;
-  border-radius: 16px;
+  border-radius: 0px !important;
   padding: 24px;
   margin-bottom: 24px;
   box-shadow: $card-shadow;
@@ -372,6 +376,29 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
   }
 }
+
+.view-toggle{
+  display: flex;
+  gap: 0.5rem;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 0.4rem;
+  button{
+    width: 5rem;
+    height: 2rem;
+    font-size: 1rem;
+    color: black;
+    border: none;
+    background: rgb(255, 255, 255);
+    cursor: pointer;
+
+    &:hover{
+      background: black;
+      color: white;
+    }
+  }
+}
+
 
 // Orders Grid
 .orders-grid {
@@ -738,9 +765,9 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
   background: white;
 
   &:hover {
-    background: linear-gradient(145deg, #ffffff, #f3f6fb);
-    box-shadow: 0px 10px 10px rgb(0, 0, 0);
-    border: 1px solid #e6ecf5;
+    // background: linear-gradient(145deg, #ffffff, #f3f6fb);
+    // box-shadow: 0px 10px 10px rgb(0, 0, 0);
+    // border: 1px solid #e6ecf5;
   }
 
   .card-title {
