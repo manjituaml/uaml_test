@@ -21,6 +21,7 @@ const purchaseItemSchema = new mongoose.Schema({
   action: { type: String, enum: ['pending', 'ready', 'invoice ready', 'dispatch'], default: 'pending' },
   file: { type: String, default: '' },
   plannedDispatchDate: { type: Date },
+  planDateAction: {type: String, enum: ['suggested', 'rejected', 'declared'], default: null},
   dispatches: [dispatchSchema],
   dispatchedQuantity: { type: Number, default: 0 },
   closedItem: { type: Date },

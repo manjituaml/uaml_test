@@ -1,0 +1,34 @@
+.planDateAction {
+  // border: 2px solid red;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  .planactionbutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    // border: 2px solid magenta;
+    button {
+      z-index: 111111;
+      border: none;
+      box-shadow: 1px 1px 5px black;
+      cursor: pointer;
+    }
+    .declaredBtn {
+      background: rgb(135, 232, 135);
+    }
+    .rejectedBtn {
+      background: rgb(237, 95, 95);
+    }
+  }
+}
+
+.statusapproved {
+  z-index: 111111;
+  box-shadow: 1px 1px 5px black;
+  background: rgb(135, 232, 135);
+  width: 6rem;
+  text-align: center;
+  font-weight: 700;
+}

@@ -65,6 +65,7 @@ function EditOrderCard() {
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState("");
 
+  const isDateApproved = orderDetails?.planDateAction === "declared"
   // Action options
   const actionOptions = [
     {
@@ -852,6 +853,7 @@ function EditOrderCard() {
                   value={formData.plannedDispatchDate}
                   onChange={handleInputChange}
                   className="form-input"
+                  disabled = {isDateApproved}
                 />
               </div>
 

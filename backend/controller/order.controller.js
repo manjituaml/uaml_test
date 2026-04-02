@@ -109,6 +109,7 @@ export const createOrder = async (req, res) => {
         ? new Date(plannedDispatchDate)
         : null,
       closedItem: null,
+      planDateAction: null,
       podate: podate ? new Date(podate) : null,
     });
 
@@ -394,7 +395,26 @@ export const updateOrder = async (req, res) => {
       plannedDispatchDate,
       action,
       podate,
+      planDateAction,
     } = req.body;
+
+    const userId = req.user;
+
+    if (!userId)
+      return res
+        .status(404)
+        .json({ success: false, message: "Unauthorised Access" });
+
+    const user = await User.findById(userId);
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User does not exist." });
+
+    const isProductionHead =
+      user?.department === "production" && user?.jobPosition === "manager";
+    const isMarketingHead =
+      user?.department === "marketing" && user?.jobPosition === "manager";
 
     // Find the order
     const order = await PurchaseOrder.findById(id);
@@ -504,12 +524,36 @@ export const updateOrder = async (req, res) => {
     const remainingQuantity = newQuantity - order.dispatchedQuantity;
     updateData.reflectAmount = remainingQuantity * newUnitPrice;
 
-    if (plannedDispatchDate !== undefined) {
+    // 🏭 PRODUCTION HEAD → suggest date
+    if (plannedDispatchDate !== undefined && isProductionHead) {
       updateData.plannedDispatchDate = plannedDispatchDate
         ? new Date(plannedDispatchDate)
         : null;
+
+      updateData.planDateAction = "suggested";
     }
 
+    // 📢 MARKETING HEAD → approve / reject
+    if (planDateAction && isMarketingHead) {
+      if (!order.plannedDispatchDate) {
+        return res.status(400).json({
+          success: false,
+          message: "No suggested date available to act on",
+        });
+      }
+
+      if (planDateAction === "declared") {
+        updateData.planDateAction = "declared";
+      } else if (planDateAction === "rejected") {
+        updateData.planDateAction = "rejected";
+        updateData.plannedDispatchDate = null;
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid planDateAction",
+        });
+      }
+    }
     if (podate !== undefined) {
       updateData.podate = podate ? new Date(podate) : null;
     }
