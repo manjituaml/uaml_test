@@ -14,6 +14,8 @@ function OrderCard2() {
         <th>Unit Price</th>
         <th>Order Value</th>
         <th>Remaining Qty</th>
+        <th>Planned Dispatch Date</th>
+        <th>Actual Dispatch Date</th>
       </tr>
     </thead>
   );
