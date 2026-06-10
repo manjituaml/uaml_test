@@ -141,6 +141,31 @@ function OrderList() {
     );
   }
 
+  const quickSummary = sortedOrders.reduce(
+    (acc, order) => {
+      const remainingQty =
+        (order.quantity || 0) - (order.dispatchedQuantity || 0);
+
+      let remainingAmount = 0;
+
+      if (order.itemType === "Export") {
+        remainingAmount =
+          remainingQty * (order.unitPrice || 0) * (order.exchangeRate || 1);
+      } else {
+        remainingAmount = remainingQty * (order.unitPrice || 0);
+      }
+
+      acc.totalRemainingQty += remainingQty;
+      acc.totalRemainingAmount += remainingAmount;
+
+      return acc;
+    },
+    {
+      totalRemainingQty: 0,
+      totalRemainingAmount: 0,
+    },
+  );
+
   return (
     <div className="orders-modern-page">
       {/* Header Section */}
@@ -341,61 +366,75 @@ function OrderList() {
           </button>
         </div>
       </div>
-      <div className="view-toggle">
-        <button
-          className={viewMode === "grid" ? "active" : ""}
-          onClick={() => setViewMode("grid")}
-        >
-          Grid
-        </button>
+      <div className="toggledata">
+        <div className="view-toggle">
+          <button
+            className={viewMode === "grid" ? "active" : ""}
+            onClick={() => setViewMode("grid")}
+          >
+            Grid
+          </button>
 
-        <button
-          className={viewMode === "list" ? "active" : ""}
-          onClick={() => setViewMode("list")}
-        >
-          List
-        </button>
+          <button
+            className={viewMode === "list" ? "active" : ""}
+            onClick={() => setViewMode("list")}
+          >
+            List
+          </button>
+        </div>
+
+        <div className="quicksummarise">
+          <p>
+            Total Remaining Amount: &nbsp;
+            <span>₹ {quickSummary.totalRemainingAmount.toLocaleString()}</span>
+          </p>
+
+          <p>
+            Total Remaining Quantity: &nbsp;
+            <span>{quickSummary.totalRemainingQty.toLocaleString()}</span>
+          </p>
+        </div>
       </div>
       {/* Orders Grid */}
-        {sortedOrders.length === 0 ? (
-          <div className="no-results">
-            <Package size={48} />
-            <h3>No orders found</h3>
-            <p>Try adjusting your search or filter criteria</p>
-            <button
-              onClick={() => navigate("/order/create")}
-              className="create-first-order"
-            >
-              <Plus size={16} />
-              Create Your First Order
-            </button>
-          </div>
-        ) : viewMode === "grid" ? (
-          <div className="orders-grid">
-            {sortedOrders.map((order) => (
-              <OrderCard
-                key={order._id}
-                item={order}
-                onClick={() => navigate(`/order/${order._id}/edit`)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="orders-list">
-            <table>
-              <OrderCard2 /> {/* Header */}
-              <tbody>
-                {sortedOrders.map((order) => (
-                  <OrderRow
-                    key={order._id}
-                    item={order}
-                    onClick={() => navigate(`/order/${order._id}/edit`)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      {sortedOrders.length === 0 ? (
+        <div className="no-results">
+          <Package size={48} />
+          <h3>No orders found</h3>
+          <p>Try adjusting your search or filter criteria</p>
+          <button
+            onClick={() => navigate("/order/create")}
+            className="create-first-order"
+          >
+            <Plus size={16} />
+            Create Your First Order
+          </button>
+        </div>
+      ) : viewMode === "grid" ? (
+        <div className="orders-grid">
+          {sortedOrders.map((order) => (
+            <OrderCard
+              key={order._id}
+              item={order}
+              onClick={() => navigate(`/order/${order._id}/edit`)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="orders-list">
+          <table>
+            <OrderCard2 /> {/* Header */}
+            <tbody>
+              {sortedOrders.map((order) => (
+                <OrderRow
+                  key={order._id}
+                  item={order}
+                  onClick={() => navigate(`/order/${order._id}/edit`)}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

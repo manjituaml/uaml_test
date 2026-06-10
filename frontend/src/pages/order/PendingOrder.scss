@@ -377,7 +377,31 @@ $card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
   }
 }
 
+.toggledata{
+  // border: 2px solid green;
+  display: flex;
+  justify-content: space-between;
+  color: $background-light;
+
+  .quicksummarise{
+    display: flex;
+    gap: 4rem;
+    padding: 0rem 2rem;
+    // border: 2px solid red;
+
+    p{
+      font-weight: 700;
+      
+      span{
+        font-weight: 300;
+        
+      }
+    }
+  }
+}
+
 .view-toggle{
+  // border: 2px solid red;
   display: flex;
   gap: 0.5rem;
   justify-content: start;
